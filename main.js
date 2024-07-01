@@ -33,17 +33,14 @@ let billboard = {
     targetAlpha: 0,
     targetScale: 0.5,
     fadeSpeed: 0.05,
-    text: 'Trap Door Activated!',
+    text: ['hire me!', 'it is really fun to create', 'art is a good thing to do.', '1', '2', 'data science is cool!'],
     currentText: '',
     textIndex: 0,
+    messageIndex: 0,
     cursorVisible: true,
     cursorBlinkSpeed: 500,
     lastBlinkTime: 0
 };
-
-
-
-
 
 function loadImage(src) {
     return new Promise((resolve, reject) => {
@@ -94,7 +91,6 @@ canvas.addEventListener('click', (event) => {
     let x = event.clientX - rect.left;
     let y = event.clientY - rect.top;
     console.log('Mouse clicked at: ', x, y);
-    console.log('holle ouse cloick');
 
     sprite.destination = { x: x, y: Math.max(y, screen.height / 2) }; // Ensure destination is at or below ground level
     sprite.mode = sprite.mode === 'rest' ? 'run' : 'rest';
@@ -116,20 +112,28 @@ function checkTrapDoorZone() {
         if (billboard.visible) {
             billboard.targetAlpha = 0;
             billboard.targetScale = 0.5;
+            // Increment messageIndex when the billboard is about to become invisible
+            billboard.messageIndex++;
+            if (billboard.messageIndex >= billboard.text.length) {
+                billboard.messageIndex = 0;
+            }
+            billboard.visible = false;
         }
     }
 }
+
 function updateBillboardText() {
-    if (billboard.visible && billboard.textIndex < billboard.text.length && iterationCounter % 4 === 0) {
-        billboard.currentText += billboard.text[billboard.textIndex];
-        billboard.textIndex++;
+    if (billboard.visible && iterationCounter % 4 === 0) {
+        if (billboard.textIndex < billboard.text[billboard.messageIndex].length) {
+            billboard.currentText += billboard.text[billboard.messageIndex][billboard.textIndex];
+            billboard.textIndex++;
+        }
     }
 
     if (iterationCounter % (FRAME_RATE / 2) === 0) { // blink cursor every half second
         billboard.cursorVisible = !billboard.cursorVisible;
     }
 }
-
 
 function drawBillboard() {
     if (billboard.alpha < billboard.targetAlpha) {
@@ -169,7 +173,7 @@ function drawBillboard() {
         ctx.fillStyle = 'white';
         ctx.font = '30px "Courier New", Courier, monospace';
         let displayText = billboard.currentText;
-        if (billboard.cursorVisible && billboard.textIndex < billboard.text.length) {
+        if (billboard.cursorVisible && billboard.textIndex < billboard.text[billboard.messageIndex].length) {
             displayText += '_';
         }
         ctx.fillText(displayText, x + 50, y + height / 2);
@@ -179,10 +183,9 @@ function drawBillboard() {
     }
 }
 
-
 async function gameLoop(timestamp) {
     const deltaTime = timestamp - lastTime;
-	
+    
     if (deltaTime >= FRAME_DURATION) {
         lastTime = timestamp;
         let bgImage = cachedImages[currentBackgroundIndex];
@@ -222,20 +225,31 @@ async function gameLoop(timestamp) {
 
         // Draw the billboard if the trap door is activated
         if (billboard.visible || billboard.alpha > 0) {
-            updateBillboardText(deltaTime);
+            updateBillboardText();
             drawBillboard();
-			
-			
         }
     }
 
     requestAnimationFrame(gameLoop);
 }
 
-
 async function startGame() {
     await preloadImages();
     requestAnimationFrame(gameLoop);
 }
+
+// Show the billboard in full screen when the "Show Resume" button is clicked
+document.getElementById('show-resume-btn').addEventListener('click', () => {
+    const billboard = document.getElementById('billboard');
+    billboard.style.display = 'block';
+});
+
+// Hide the billboard when the "Close" button is clicked
+document.getElementById('billboard').addEventListener('click', (event) => {
+    if (event.target.id === 'close-resume-btn') {
+        const billboard = document.getElementById('billboard');
+        billboard.style.display = 'none';
+    }
+});
 
 startGame();

@@ -5,15 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hire Me</title>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-size: cover; /* Ensure the background image covers the entire viewport */
+            height: 100vh; /* Ensure the body covers the full viewport height */
+        }
         canvas {
             border: 1px solid black;
+        }
+        #billboard {
+            position: fixed; /* Full screen */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            display: none; /* Initially hidden */
+            overflow-y: auto; /* Allow scrolling if content overflows */
+        }
+        #show-resume-btn {
+            
+			position: fixed; /* Position the button */
+            bottom: 20px; /* Place it 20px from the bottom */
+            left: 0px; /* Place it 20px from the left */
+            background: url('src/png/dragon.png') no-repeat center center;
+            background-size: cover; /* Ensure the background image covers the button */
+            width: 250px; /* Adjust the width to fit the text */
+            height: 200px; /* Adjust the height as needed */
+            border: none; /* Remove default border */
+            color: white; /* Text color */
+            text-align: center; /* Center the text */
+            text-decoration: none; /* Remove underline */
+            font-size: 16px; /* Font size */
+            line-height: 100px; /* Center text vertically */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: opacity 0.3s; /* Smooth transition for opacity */
+        }
+        #show-resume-btn:hover {
+            opacity: 0.85; /* Opacity on hover */
+        }
+        #close-resume-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #dc3545;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        #close-resume-btn:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <script src="https://unpkg.com/htmx.org@1.5.0"></script>
+    <button id="show-resume-btn" ></button>
+    <div id="billboard">
+        <div id="billboard-content">
+            <div class="resume-container">
+                <h1>My Resume</h1>
+                <iframe src="src/html/resume.pdf" width="100%" height="400px"></iframe>
+                <p>
+                    <a href="src/html/resume.pdf" download>Download PDF</a>
+                    <button id="close-resume-btn">Close</button>
+                </p>
+            </div>
+        </div>
+    </div>
     <script src="main.js"></script>
-    
 </body>
 </html>
