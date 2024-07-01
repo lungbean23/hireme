@@ -41,6 +41,10 @@ let billboard = {
     lastBlinkTime: 0
 };
 
+
+
+
+
 function loadImage(src) {
     return new Promise((resolve, reject) => {
         let img = new Image();
@@ -178,7 +182,7 @@ function drawBillboard() {
 
 async function gameLoop(timestamp) {
     const deltaTime = timestamp - lastTime;
-
+	
     if (deltaTime >= FRAME_DURATION) {
         lastTime = timestamp;
         let bgImage = cachedImages[currentBackgroundIndex];
@@ -220,6 +224,8 @@ async function gameLoop(timestamp) {
         if (billboard.visible || billboard.alpha > 0) {
             updateBillboardText(deltaTime);
             drawBillboard();
+			
+			
         }
     }
 
