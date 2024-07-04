@@ -8,14 +8,35 @@
         body {
             margin: 0;
             padding: 0;
-            background-size: cover; /* Ensure the background image covers the entire viewport */
-            height: 100vh; /* Ensure the body covers the full viewport height */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
         }
-        canvas {
+        #gameCanvas {
             border: 1px solid black;
+            image-rendering: pixelated;
+        }
+        #show-resume-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: url('src/png/dragon.png') no-repeat center center;
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        #show-resume-btn:hover {
+            opacity: 0.85;
+            transform: scale(1.1);
         }
         #billboard {
-            position: fixed; /* Full screen */
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -23,63 +44,97 @@
             background: rgba(0, 0, 0, 0.9);
             color: white;
             padding: 20px;
-            display: none; /* Initially hidden */
-            overflow-y: auto; /* Allow scrolling if content overflows */
+            display: none;
+            overflow-y: auto;
         }
-        #show-resume-btn {
-            
-			position: fixed; /* Position the button */
-            bottom: 20px; /* Place it 20px from the bottom */
-            left: 0px; /* Place it 20px from the left */
-            background: url('src/png/dragon.png') no-repeat center center;
-            background-size: cover; /* Ensure the background image covers the button */
-            width: 250px; /* Adjust the width to fit the text */
-            height: 200px; /* Adjust the height as needed */
-            border: none; /* Remove default border */
-            color: white; /* Text color */
-            text-align: center; /* Center the text */
-            text-decoration: none; /* Remove underline */
-            font-size: 16px; /* Font size */
-            line-height: 100px; /* Center text vertically */
-            cursor: pointer; /* Pointer cursor on hover */
-            transition: opacity 0.3s; /* Smooth transition for opacity */
+        #billboard-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-right: 2em; /* Add right padding */
         }
-        #show-resume-btn:hover {
-            opacity: 0.85; /* Opacity on hover */
+        #control-panel {
+            display: flex;
+            justify-content: flex-end; /* Align items to the right */
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            z-index: 10;
+        }
+        #resume-frame {
+            flex-grow: 1;
+            border: none;
         }
         #close-resume-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
             font-size: 16px;
             color: #fff;
             background-color: #dc3545;
             border: none;
             border-radius: 5px;
+            padding: 10px 20px;
             cursor: pointer;
-            text-align: center;
             text-decoration: none;
+            margin-right: 1em; /* Space between buttons */
+            margin-bottom:1em;
         }
         #close-resume-btn:hover {
             background-color: #c82333;
         }
+        a.download-link {
+            font-size: 16px;
+            color: #007bff;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+        a.download-link::before {
+            content: "↓"; /* Unicode character for down arrow */
+            margin-right: 5px; /* Space between arrow and text */
+            margin-bottom 1em;
+        }
+        a.download-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <button id="show-resume-btn" ></button>
+    <canvas id="gameCanvas" width="1024" height="1024"></canvas>
+    <button id="show-resume-btn"></button>
     <div id="billboard">
         <div id="billboard-content">
-            <div class="resume-container">
-                <h1>My Resume</h1>
-                <iframe src="src/html/resume.pdf" width="100%" height="400px"></iframe>
-                <p>
-                    <a href="src/html/resume.pdf" download>Download PDF</a>
-                    <button id="close-resume-btn">Close</button>
-                </p>
+            <iframe id="resume-frame" src="src/html/resume.pdf" width="100%"></iframe>
+            <div id="control-panel">
+                <a href="src/html/resume.pdf" download class="download-link"></a>
+                <button id="close-resume-btn">Close</button>
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('show-resume-btn').addEventListener('click', () => {
+            const billboard = document.getElementById('billboard');
+            billboard.style.display = 'block';
+            adjustIframeHeight();
+        });
+
+        document.getElementById('close-resume-btn').addEventListener('click', () => {
+            const billboard = document.getElementById('billboard');
+            billboard.style.display = 'none';
+        });
+
+        window.addEventListener('resize', adjustIframeHeight);
+
+        function adjustIframeHeight() {
+            const resumeFrame = document.getElementById('resume-frame');
+            const controlPanelHeight = document.getElementById('control-panel').offsetHeight;
+            resumeFrame.style.height = `calc(100vh - ${controlPanelHeight + 40}px)`; // Adjust height to account for control panel and padding
+        }
+
+        // Initial adjustment
+        adjustIframeHeight();
+    </script>
     <script src="main.js"></script>
 </body>
 </html>
+
