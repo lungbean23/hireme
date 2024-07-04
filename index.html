@@ -13,27 +13,32 @@
             justify-content: center;
             align-items: center;
             background-color: black;
+            flex-direction: column; /* To stack the elements vertically */
         }
         #gameCanvas {
-            border: 1px solid black;
+            border: 0.0625em solid black; /* 1px */
             image-rendering: pixelated;
+            position: relative; /* Position relative to contain the absolute positioned button */
         }
         #show-resume-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
+            position: absolute;
+            bottom: -3.125em; /* 50px, to position it below the canvas */
+            left: 50%;
+            transform: translateX(-50%);
             background: url('src/png/dragon.png') no-repeat center center;
             background-size: cover;
-            width: 50px;
-            height: 50px;
+            width: 3.825em; /* 50px */
+            height: 3.825em; /* 50px */
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s;
         }
         #show-resume-btn:hover {
             opacity: 0.85;
-            transform: scale(1.1);
+            width: 3.89em; /* 50px */
+            height: 3.89em; /* 50px */
+            
         }
         #billboard {
             position: fixed;
@@ -43,7 +48,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.9);
             color: white;
-            padding: 20px;
+            padding: 1.25em; /* 20px */
             display: none;
             overflow-y: auto;
         }
@@ -58,8 +63,8 @@
             display: flex;
             justify-content: flex-end; /* Align items to the right */
             position: absolute;
-            bottom: 10px;
-            right: 20px;
+            bottom: 0.625em; /* 10px */
+            right: 1.25em; /* 20px */
             z-index: 10;
         }
         #resume-frame {
@@ -67,32 +72,32 @@
             border: none;
         }
         #close-resume-btn {
-            font-size: 16px;
+            font-size: 1em; /* 16px */
             color: #fff;
             background-color: #dc3545;
             border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
+            border-radius: 0.3125em; /* 5px */
+            padding: 0.625em 1.25em; /* 10px 20px */
             cursor: pointer;
             text-decoration: none;
             margin-right: 1em; /* Space between buttons */
-            margin-bottom:1em;
+            margin-bottom: 1em;
         }
         #close-resume-btn:hover {
             background-color: #c82333;
         }
         a.download-link {
-            font-size: 16px;
+            font-size: 1em; /* 16px */
             color: #007bff;
             text-decoration: none;
-            padding: 10px 20px;
+            padding: 0.625em 1.25em; /* 10px 20px */
             display: flex;
             align-items: center;
         }
         a.download-link::before {
             content: "↓"; /* Unicode character for down arrow */
-            margin-right: 5px; /* Space between arrow and text */
-            margin-bottom 1em;
+            margin-right: 0.3125em; /* 5px */
+            margin-bottom: 1em;
         }
         a.download-link:hover {
             text-decoration: underline;
@@ -100,8 +105,10 @@
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="1024" height="1024"></canvas>
-    <button id="show-resume-btn"></button>
+    <div style="position: relative;">
+        <canvas id="gameCanvas" width="1024" height="1024"></canvas>
+        <button id="show-resume-btn"></button>
+    </div>
     <div id="billboard">
         <div id="billboard-content">
             <iframe id="resume-frame" src="src/html/resume.pdf" width="100%"></iframe>
@@ -128,7 +135,7 @@
         function adjustIframeHeight() {
             const resumeFrame = document.getElementById('resume-frame');
             const controlPanelHeight = document.getElementById('control-panel').offsetHeight;
-            resumeFrame.style.height = `calc(100vh - ${controlPanelHeight + 40}px)`; // Adjust height to account for control panel and padding
+            resumeFrame.style.height = `calc(100vh - ${controlPanelHeight + 2.5}em)`; // Adjust height to account for control panel and padding
         }
 
         // Initial adjustment
